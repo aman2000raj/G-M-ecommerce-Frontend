@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { IoMdClose, IoMdRemove, IoMdAdd } from 'react-icons/io';
+import { CartContext } from '../contexts/CartContext';
 
 const CartItem = ({ item }) => {
+  const { removeFromCart } = useContext(CartContext);
   const { id, image, title, price, amount } = item;
 
   return (
@@ -21,7 +23,7 @@ const CartItem = ({ item }) => {
             >
               {title}
             </Link>
-            <div className='text-xl cursor-pointer'>
+            <div onClick={() => removeFromCart(id)} className='text-xl cursor-pointer'>
               <IoMdClose className='text-gray-500 hover:text-red-500 transition' />
             </div>
           </div>
@@ -37,7 +39,9 @@ const CartItem = ({ item }) => {
                 <IoMdAdd />
               </div>
             </div>
-            <div className='flex-1 flex items-center justify-around'>$ {parseFloat(price).toFixed(2)}</div>
+            <div className='flex-1 flex items-center justify-around'>
+              $ {parseFloat(price).toFixed(2)}
+            </div>
             <div className='flex-1 flex justify-end items-center text-primary font-medium'>{`$ ${parseFloat(
               price * amount
             ).toFixed(2)}`}</div>
