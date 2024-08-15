@@ -11,7 +11,7 @@ const Home = () => {
     );
   });
 
-  console.log(filteredProducts);
+  
   return (
     <div>
       <section className='py-16'>
