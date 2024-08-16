@@ -18,8 +18,8 @@ const App = () => {
           <Route path='/product/:id' element={<ProductDetails />} />
         </Routes>
         <SideBar />
+        <Footer />
       </Router>
-      <Footer />
     </div>
   );
 };
