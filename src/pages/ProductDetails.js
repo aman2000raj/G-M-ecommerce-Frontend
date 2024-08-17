@@ -20,23 +20,31 @@ const ProductDetails = () => {
   const { image, description, title, price } = product;
 
   return (
-    <section className='pt-32 pb-12 lg:py-32 h-screen flex items-center'>
-      <div className='container mx-auto'>
-        {/* image & text wrapper */}
-        <div className='flex flex-col lg:flex-row items-center'>
-          <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0'>
-            <img className='max-w-[200px] lg:max-w-sm' src={image} alt='' />
+    <section className='pt-20 pb-12 lg:py-32 flex items-center'>
+      <div className='container mx-auto px-4'>
+        <div className='flex flex-col lg:flex-row items-center gap-8'>
+          {/* Product Image */}
+          <div className='w-full lg:w-1/2 flex justify-center items-center mb-8 lg:mb-0'>
+            <img
+              className='max-w-[200px] sm:max-w-[300px] lg:max-w-sm w-full'
+              src={image}
+              alt={title}
+            />
           </div>
-          <div className='flex-1 text-center lg:text-left'>
-            <h1 className='text-[26px] font-medium mb-2 max-w-[450px] mx-auto lg:mx-0'>
+          
+          {/* Product Details */}
+          <div className='w-full lg:w-1/2 text-center lg:text-left'>
+            <h1 className='text-[24px] sm:text-[26px] font-medium mb-4 mx-auto lg:mx-0'>
               {title}
             </h1>
-            <div className='text-xl text-red-500 font-medium mb-6'>
-              $ {parseFloat(price).toFixed(2)}
+            <div className='text-xl sm:text-2xl text-red-500 font-medium mb-6'>
+              ${parseFloat(price).toFixed(2)}
             </div>
-            <p className='mb-8'>{description}</p>
+            <p className='text-sm sm:text-base mb-8 max-w-[400px] mx-auto lg:mx-0'>
+              {description}
+            </p>
             <button
-              className='bg-primary text-white py-4 px-8'
+              className='bg-primary text-white py-3 px-6 sm:py-4 sm:px-8 rounded-md hover:bg-primary-dark transition-all duration-200'
               onClick={() => addToCart(product, product.id)}
             >
               Add to cart
