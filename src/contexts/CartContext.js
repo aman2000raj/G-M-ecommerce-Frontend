@@ -6,6 +6,8 @@ const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [itemAmount, setItemAmount] = useState(0);
   const [total, setTotal] = useState(0);
+  const [isSnackbarVisible, setIsSnackbarVisible] = useState(false); 
+
 
   useEffect(() => {
     const total = cart.reduce((accumalator, currentItem) => {
@@ -20,6 +22,13 @@ const CartProvider = ({ children }) => {
     }, 0);
     setItemAmount(amount);
   }, [cart]);
+
+  const showSnackbar = () => {
+    setIsSnackbarVisible(true);
+    setTimeout(() => {
+      setIsSnackbarVisible(false);
+    }, 2000);
+  }
 
   const addToCart = (product, id) => {
     const newItem = { ...product, amount: 1 };
@@ -40,6 +49,7 @@ const CartProvider = ({ children }) => {
     } else {
       setCart([...cart, newItem]);
     }
+    showSnackbar();
   };
 
   const removeFromCart = (id) => {
@@ -90,6 +100,11 @@ const CartProvider = ({ children }) => {
       }}
     >
       {children}
+      {isSnackbarVisible && (
+        <div className="fixed bottom-4 left-6 bg-gray-800 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300">
+          Added to Cart
+        </div>
+      )}
     </CartContext.Provider>
   );
 };
