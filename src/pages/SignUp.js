@@ -11,6 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from '../img/logo.svg';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
@@ -34,10 +35,35 @@ const validationSchema = Yup.object({
 });
 
 const SignUp = () => {
-  const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
+
+  const navigate = useNavigate();
+
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    
+
+    try {
+      const response = await fetch('http://localhost:8080/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+      const data = await response.json();
+  
+      
+      if (response.ok) {
+       
+        navigate('/login');
+      } else {
+        console.error('Registration failed:', data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
     setSubmitting(false);
   };
+
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

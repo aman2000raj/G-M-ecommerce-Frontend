@@ -1,10 +1,12 @@
+// src/components/SignIn.js
 import * as React from 'react';
+import { useContext } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -13,19 +15,46 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from '../img/logo.svg';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { UserContext } from '../contexts/UserContext.js';
 
 const defaultTheme = createTheme();
 
 const validationSchema = Yup.object({
-  email: Yup.string().email('Invalid email address').required('Email is required'),
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
   password: Yup.string().required('Password is required'),
 });
 
 const SignIn = () => {
-  const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext); 
+
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data); // Save user data to context and localStorage
+        navigate('/'); // Redirect to home or another page
+      } else {
+        const errorData = await response.json();
+        setErrors({ general: errorData.message || 'An error occurred' });
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      setErrors({ general: 'An error occurred' });
+    }
     setSubmitting(false);
   };
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -61,9 +90,7 @@ const SignIn = () => {
           >
             {({ isSubmitting, errors, touched }) => (
               <Form>
-                <Box
-                  sx={{ mt: 1 }}
-                >
+                <Box sx={{ mt: 1 }}>
                   <Field
                     as={TextField}
                     margin='normal'
@@ -94,6 +121,9 @@ const SignIn = () => {
                     control={<Checkbox value='remember' color='primary' />}
                     label='Remember me'
                   />
+                  {errors.general && (
+                    <Typography color='error'>{errors.general}</Typography>
+                  )}
                   <Button
                     type='submit'
                     fullWidth
