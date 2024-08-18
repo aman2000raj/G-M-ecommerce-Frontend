@@ -7,10 +7,9 @@ const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchedProducts = async () => {
-      const response = await fetch('https://fakestoreapi.com/products');
+      const response = await fetch('http://localhost:8080/api/products');
       const data = await response.json();
       setProducts(data);
-      // console.log(data);
     };
 
     fetchedProducts();
